@@ -1,0 +1,231 @@
+        * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+          font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+        body {
+          background: #f5f5f5;
+          color: #222;
+        }
+        header {
+          position: sticky;
+          top: 0;
+          z-index: 10;
+          background: #ffffff;
+          padding: 1rem 2rem;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .header-inner {
+          width: 100%;
+          max-width: 1200px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+        }
+        .site-title {
+          text-align: center;
+          font-size: 1.7rem;
+          font-weight: 700;
+        }
+        .logo {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          border: 2px solid #C8AC6E;
+          margin-right: 0.6rem;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.9rem;
+          font-weight: 700;
+          color: #C8AC6E;
+        }
+        .login-area {
+          position: absolute;
+          right: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+        .login-area a {
+          text-decoration: none;
+          font-size: 0.9rem;
+          color: #C8AC6E;
+        }
+        .btn {
+          border-radius: 999px;
+          padding: 0.4rem 1rem;
+          border: 1px solid #c8ab6ecc;
+          background: #C8AC6E;
+          color: #fff;
+          cursor: pointer;
+          font-size: 0.9rem;
+          transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
+        }
+        .btn.outline {
+          background: transparent;
+          color: #C8AC6E;
+        }
+        .btn:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 3px 8px rgba(15, 118, 110, 0.25);
+        }
+        main {
+        max-width: 1200px;
+        margin: 1.5rem auto 2rem;
+        padding: 0 1rem;
+        display: grid;
+        grid-template-columns: 260px 1fr; 
+        gap: 1.5rem;
+        }
+        @media (max-width: 900px) {
+          main {
+            grid-template-columns: 1fr;
+          }
+          header {
+            padding-inline: 1rem;
+          }
+        }
+        .filters {
+          background: #ffffff;
+          border-radius: 1rem;
+          padding: 1rem;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+          position: sticky;
+          top: 5.2rem;
+        }
+        .filters h2 {
+          font-size: 1.1rem;
+          margin-bottom: 0.8rem;
+        }
+        .filter-group {
+          margin-bottom: 0.8rem;
+        }
+        .filter-group label {
+          display: block;
+          font-size: 0.85rem;
+          margin-bottom: 0.2rem;
+          color: #444;
+        }
+        .filter-group input {
+          width: 100%;
+          padding: 0.4rem 0.5rem;
+          border-radius: 0.6rem;
+          border: 1px solid #ddd;
+          font-size: 0.9rem;
+        }
+        .filter-inline {
+          display: flex;
+          gap: 0.4rem;
+        }
+        .filter-inline .filter-group {
+          flex: 1;
+        }
+        .filters-footer {
+          display: flex;
+          gap: 0.5rem;
+          margin-top: 0.6rem;
+          justify-content: flex-end;
+        }
+        .tools-section {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+        }
+        .tools-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 0.5rem;
+        }
+        .tools-header h2 {
+          font-size: 1.3rem;
+        }
+        .tools-header span {
+          font-size: 0.9rem;
+          color: #555;
+        }
+        .tools-grid {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 1rem;
+        }
+        .tool-card {
+          background: #ffffff;
+          border-radius: 1rem;
+          padding: 0.8rem 0.9rem;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+          display: flex;
+          flex-direction: column;
+          gap: 0.4rem;
+        }
+        .tool-title {
+          font-weight: 600;
+          font-size: 1rem;
+          margin-bottom: 0.2rem;
+        }
+        .tool-meta {
+          font-size: 0.85rem;
+          color: #555;
+        }
+        .tool-price {
+          font-weight: 600;
+          margin-top: 0.3rem;
+        }
+        .tool-footer {
+          margin-top: 0.4rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 0.5rem;
+        }
+        .badge {
+          display: inline-flex;
+          font-size: 0.75rem;
+          padding: 0.15rem 0.5rem;
+          border-radius: 999px;
+          background: #ecfdf5;
+          color: #C8AC6E;
+          border: 1px solid #a7f3d0;
+        }
+        .pagination {
+          display: flex;
+          justify-content: center;
+          gap: 0.4rem;
+          margin-top: 0.8rem;
+          flex-wrap: wrap;
+        }
+        .page-btn {
+          border-radius: 999px;
+          border: 1px solid #ddd;
+          padding: 0.25rem 0.7rem;
+          background: #ffffff;
+          font-size: 0.9rem;
+          cursor: pointer;
+          text-decoration: none;
+          display: inline-block;
+        }
+        .page-btn.active {
+          background: #C8AC6E;
+          border-color: #c8ab6ec7;
+          color: #ffffff;
+          font-weight: 600;
+        }
+        .page-btn.disabled {
+          opacity: 0.4;
+          cursor: not-allowed;
+          pointer-events: none;
+        }
+        footer {
+          text-align: center;
+          font-size: 0.8rem;
+          color: #777;
+          padding-bottom: 1.5rem;
+        }
