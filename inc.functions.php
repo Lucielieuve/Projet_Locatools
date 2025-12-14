@@ -106,20 +106,30 @@ function getUtilisateurInfo(string $identifiant, string $motdepasse): ?array
 {
     global $pdo;
 
+    // Récupère les infos de l'utilisateur
     $sql = "SELECT id, identifiant, motdepasse, role
             FROM utilisateurs
             WHERE identifiant = :identifiant
-              AND motdepasse = :motdepasse";
+            LIMIT 1";
 
     $stmt = $pdo->prepare($sql);
     $stmt->bindValue(':identifiant', $identifiant, PDO::PARAM_STR);
-    $stmt->bindValue(':motdepasse', $motdepasse, PDO::PARAM_STR);
     $stmt->execute();
 
     $user = $stmt->fetch();
 
-    return $user ?: null;
+    if (!$user) {
+        return null;
+    }
+
+    // On vérifie que le mdp est bien hashé et donc que la connexion est bien sécurisée
+    if (!password_verify($motdepasse, $user['motdepasse'])) {
+        return null;
+    }
+
+    return $user;
 }
+
 
 /**
  * Connecte l'utilisateur et enregistre ses infos dans un tableau
