@@ -74,9 +74,21 @@ if (isset($_GET['supprimer'])) {
       <p><strong>Rôle :</strong> <?= htmlspecialchars($role); ?></p>
     </div>
 
-    <div class="modifier-compte-area">
-        <a class="modifier-compte-btn espacer" href="#.php">Modifier</a>
-    </div>
+    <!-- Formulaire de modification -->
+    <form method="post" action="modification_profil.php">
+      <div class="profil-info-modification">
+        <label>Identifiant :</label><br>
+        <input type="text" name="identifiant" value="<?= htmlspecialchars($identifiant); ?>"><br>
+      </div>
+
+      <div class="profil-info">
+        <label> Mot de passe:</label><br>
+       <input type="password" name="motdepasse"><br>
+      </div>
+
+      <input type="hidden" name="id" value="<?= $id; ?>">
+      <button type="submit" class="btn-modif">Enregistrer</button>
+    </form>
       
   </section>
 

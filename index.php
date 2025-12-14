@@ -19,6 +19,12 @@ if (!empty($_GET['outil'])) {
             $user = $_SESSION['utilisateur'];
             // On récupère l’utilisateur qui est actuellement connecté
             ajouterReservation($user['id'], $outil['id']);
+
+            // Récupération date choisie transmise dans l'url
+            $dateDebut = $_GET['date'] ?? null;
+
+            // Ajout de la réservation avec la date
+            ajouterReservation($user['id'], $outil['id'], $dateDebut);
             
             adddMessageAlert("Outil ajouté à vos réservations !");
             // On redirige vers la page d’accueil
@@ -162,9 +168,9 @@ $totalPages  = $pagination['total_pages'];
               <?php endif; ?>
             </div>
               
-            <div class="filter-group"> <!-- La date doit être comptablisée dans la réservation -->
-              <input type="date" id="filter-date" name="date"
-                    value="<?= htmlspecialchars($filtres['date'] ?? '', ENT_QUOTES); ?>">
+            <div class="filter-group">
+                <label for="filter-date">Date de réservation</label>
+                <input type="date" id="filter-date" name="date" value="<?= htmlspecialchars($filtres['date'] ?? '', ENT_QUOTES); ?>">
             </div>
 
           </article>
