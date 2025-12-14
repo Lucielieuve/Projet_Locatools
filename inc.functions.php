@@ -50,7 +50,8 @@ function getOutilsFiltres(array $filtres = []): array
                 o.id,
                 o.nom,
                 o.quantite,
-                o.tarif_journee";
+                o.tarif_journee,
+                o.image";
 
     if (!empty($date)) {
         $sql .= ",
@@ -86,7 +87,7 @@ function getOutilsFiltres(array $filtres = []): array
     }
 
     if (!empty($date)) {
-        $sql .= " GROUP BY o.id, o.nom, o.quantite, o.tarif_journee
+        $sql .= " GROUP BY o.id, o.nom, o.quantite, o.tarif_journee, o.image
                   HAVING dispo > 0";
     }
 
@@ -214,7 +215,8 @@ function getReservationsByUser(int $userId): array
             r.date_fin,
             r.quantite,
             o.nom,
-            o.tarif_journee
+            o.tarif_journee,
+            o.image
         FROM reservation r
         INNER JOIN outil o ON o.id = r.outil_id
         WHERE r.utilisateur_id = :uid
@@ -244,4 +246,22 @@ function ajouterReservation($idUser, $idOutil) {
         ':idUser'  => $idUser,
         ':idOutil' => $idOutil
     ]);
+}
+
+/**
+ * Supprime une réservation
+ */
+function supprimerReservation(int $reservationId, int $userId): bool
+{
+    global $pdo;
+
+    $sql = "DELETE FROM reservation
+            WHERE id = :rid
+              AND utilisateur_id = :uid";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(':rid', $reservationId, PDO::PARAM_INT);
+    $stmt->bindValue(':uid', $userId, PDO::PARAM_INT);
+
+    return $stmt->execute();
 }

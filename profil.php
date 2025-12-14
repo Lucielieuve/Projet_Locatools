@@ -17,6 +17,28 @@ $role = $user['role'];
 
 // Récupérer ses réservations
 $reservations = getReservationsByUser($userId);
+
+// suppression réservation
+if (isset($_GET['supprimer'])) {
+
+    if (!isConnecte()) {
+        adddMessageAlert("Vous devez être connecté.");
+        header("Location: connexion.php");
+        exit;
+    }
+
+    $reservationId = (int) $_GET['supprimer'];
+    $userId = $_SESSION['utilisateur']['id'];
+
+    if (supprimerReservation($reservationId, $userId)) {
+        adddMessageAlert("Réservation supprimée.");
+    } else {
+        adddMessageAlert("Impossible de supprimer cette réservation.");
+    }
+
+    header("Location: profil.php");
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -51,6 +73,11 @@ $reservations = getReservationsByUser($userId);
       <p><strong>Identifiant :</strong> <?= htmlspecialchars($identifiant); ?></p>
       <p><strong>Rôle :</strong> <?= htmlspecialchars($role); ?></p>
     </div>
+
+    <div class="modifier-compte-area">
+        <a class="modifier-compte-btn espacer" href="#.php">Modifier</a>
+    </div>
+      
   </section>
 
   <section class="profile-card">
@@ -70,7 +97,17 @@ $reservations = getReservationsByUser($userId);
                             <strong>Quantité :</strong> <?= (int) $r['quantite']; ?><br>
                             <strong>Tarif :</strong> <?= (int) $r['tarif_journee']; ?> € / jour
                         </p>
+
+                        <div class="modifier-compte-area">
+                          <a class="supprimer-reservation"
+                            href="profil.php?supprimer=<?= (int) $r['id']; ?>"
+                            onclick="return confirm('Voulez-vous vraiment supprimer cette réservation ?');">
+                            Supprimer
+                          </a>
+                      </div>
+                      
                     </article>
+                    
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>

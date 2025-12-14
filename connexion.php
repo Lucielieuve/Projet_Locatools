@@ -1,38 +1,60 @@
 <?php
 session_start();
-require 'inc.functions.php';
+require 'inc.functions.php'; //la page regroupant toutes les fonctions pour plus d'organisation
 
-// Si l'utilisateur est déjà connecté, il est renvoyé vers l'accueil
+// Si l'utilisateur est déjà connecté, on le renvoie à la page d'accueil pour qu'il choisisse directement ses réservations
+
 if (isConnecte()) {
     header('Location: index.php');
     exit;
 }
 
+// Sinon on initialise les variables de connexion avant de le connecter
 $identifiant = '';
 $motdepasse  = '';
 
-// Traitement du formulaire
+// On vérifie que le formulaire est envoyé
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $identifiant = trim($_POST['identifiant'] ?? '');
-    $motdepasse  = trim($_POST['motdepasse']  ?? '');
 
-    // Si un des 2 champs est vide, une alerte apparaît
-    if ($identifiant === '' || $motdepasse === '') {
+    // Identifiant et mot de passe obligatoire sinon alerte
+    if (!isset($_POST['identifiant']) || !isset($_POST['motdepasse'])) {
         adddMessageAlert("Merci de remplir tous les champs.");
     } else {
-        $user = getUtilisateurInfo($identifiant, $motdepasse);
-        // Si l'identifiant et le mdp correspondent, cela renvoie l'utilisateur sur la page index.php et un message apparaît
-        if ($user) {
-            connecterUtilisateur($user);
-            adddMessageAlert("Connexion réussie, bienvenue " . htmlspecialchars($user['identifiant']) . " !");
-            header('Location: index.php');
-            exit;
+        $identifiant = $_POST['identifiant'];
+        $motdepasse  = $_POST['motdepasse'];
+
+        // Vérification que les champs ne sont pas vides
+        if ($identifiant === '' || $motdepasse === '') {
+            adddMessageAlert("Merci de remplir tous les champs.");
         } else {
-            adddMessageAlert("Identifiant ou mot de passe incorrect.");
+
+            // Vérification que ce sont bien des chaînes de caractères
+            if (!is_string($identifiant) && !is_string($motdepasse)) {
+                adddMessageAlert("Les champs doivent être des chaînes de caractères.");
+            } else {
+                // on va chercher la fonction pour récupérer les données de l'utilisateur
+                $user = getUtilisateurInfo($identifiant, $motdepasse);
+
+                // Si l'identifiant et le mdp correspondent à ceux entrés alors redirection vers index.php
+                if ($user) {
+                    // Fonction enregistre les infos en session
+                    connecterUtilisateur($user);
+                    // Fonction envoie message flash 
+                    adddMessageAlert("Connexion réussie, bienvenue " . htmlspecialchars($user['identifiant']) . " !");
+                    // redirection vers l'index
+                    header('Location: index.php');
+                    exit;
+                    
+                } else {
+                    adddMessageAlert("Identifiant ou mot de passe incorrect.");
+                }
+            }
         }
     }
 }
+
 ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>

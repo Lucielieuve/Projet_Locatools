@@ -20,7 +20,7 @@ if (!empty($_GET['outil'])) {
             // On récupère l’utilisateur qui est actuellement connecté
             ajouterReservation($user['id'], $outil['id']);
             
-            adddMessageAlert("Outil ajouté à votre panier / réservations !");
+            adddMessageAlert("Outil ajouté à vos réservations !");
             // On redirige vers la page d’accueil
             header('Location: index.php');
             // On arrête l’exécution du script
@@ -161,6 +161,12 @@ $totalPages  = $pagination['total_pages'];
                 <a href="?outil=<?= (int) $outil['id']; ?>" class="btn">Réserver</a>
               <?php endif; ?>
             </div>
+              
+            <div class="filter-group"> <!-- La date doit être comptablisée dans la réservation -->
+              <input type="date" id="filter-date" name="date"
+                    value="<?= htmlspecialchars($filtres['date'] ?? '', ENT_QUOTES); ?>">
+            </div>
+
           </article>
         <?php endforeach; ?>
       <?php else: ?>
