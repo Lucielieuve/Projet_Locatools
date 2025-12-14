@@ -4,18 +4,17 @@ require_once 'config.php';
 /**
  * Vérifie si un utilisateur est connecté
  **/
-function isConnecte(): bool
-{
+function isConnecte() {
     return isset($_SESSION['utilisateur']);
 }
 
 /**
  * Ajoute un message lors de la connexion
  */
-function adddMessageAlert(string $message): void
-{
+
+function adddMessageAlert($message) {
     if (!isset($_SESSION['messages'])) {
-        $_SESSION['messages'] = [];
+        $_SESSION['messages'] = array();
     }
     $_SESSION['messages'][] = $message;
 }
@@ -23,11 +22,11 @@ function adddMessageAlert(string $message): void
 /**
  * Affiche puis supprime les messages stockés en session
  */
-function lireEtSupprimeMessageSession(): void
-{
-    if (!empty($_SESSION['messages']) && is_array($_SESSION['messages'])) {
+
+function lireEtSupprimeMessageSession() {
+    if (isset($_SESSION['messages']) && is_array($_SESSION['messages']) && count($_SESSION['messages']) > 0) {
         foreach ($_SESSION['messages'] as $msg) {
-            echo '<div class="alert alert-info">'.htmlspecialchars($msg, ENT_QUOTES, 'UTF-8').'</div>';
+            echo '<div class="alert alert-info">' . htmlspecialchars($msg, ENT_QUOTES, 'UTF-8') . '</div>';
         }
         unset($_SESSION['messages']);
     }
@@ -36,32 +35,24 @@ function lireEtSupprimeMessageSession(): void
 /**
  * Récupère les outils filtrés depuis la BDD
  */
-function getOutilsFiltres(array $filtres = []): array
-{
+function getOutilsFiltres($filtres = array()) {
     global $pdo;
 
-    $name     = $filtres['name']      ?? '';
-    $priceMin = $filtres['price_min'] ?? null;
-    $priceMax = $filtres['price_max'] ?? null;
-    $date     = $filtres['date']      ?? null;
+    $name = isset($filtres['name']) ? $filtres['name'] : '';
+    $priceMin = isset($filtres['price_min']) ? $filtres['price_min'] : '';
+    $priceMax = isset($filtres['price_max']) ? $filtres['price_max'] : '';
+    $date = isset($filtres['date']) ? $filtres['date'] : '';
 
-    $sql = "SELECT 
-                o.id,
-                o.nom,
-                o.quantite,
-                o.tarif_journee,
-                o.image";
+    $sql = "SELECT o.id, o.nom, o.quantite, o.tarif_journee, o.image";
+    $params = array();
 
-    if (!empty($date)) {
-        $sql .= ",
-                (o.quantite - COALESCE(SUM(r.quantite), 0)) AS dispo";
+    if ($date != '') {
+        $sql .= ", (o.quantite - COALESCE(SUM(r.quantite), 0)) AS dispo";
     }
 
     $sql .= " FROM outil o";
 
-    $params = [];
-
-    if (!empty($date)) {
+    if ($date != '') {
         $sql .= " LEFT JOIN reservation r
                   ON r.outil_id = o.id
                   AND :date BETWEEN r.date_debut AND r.date_fin";
@@ -70,22 +61,22 @@ function getOutilsFiltres(array $filtres = []): array
 
     $sql .= " WHERE 1=1";
 
-    if ($name !== '') {
+    if ($name != '') {
         $sql .= " AND o.nom LIKE :name";
         $params[':name'] = '%' . $name . '%';
     }
 
-    if ($priceMin !== null && $priceMin !== '') {
+    if ($priceMin !== '' && $priceMin !== null) {
         $sql .= " AND o.tarif_journee >= :pmin";
-        $params[':pmin'] = (float) $priceMin;
+        $params[':pmin'] = $priceMin;
     }
 
-    if ($priceMax !== null && $priceMax !== '') {
+    if ($priceMax !== '' && $priceMax !== null) {
         $sql .= " AND o.tarif_journee <= :pmax";
-        $params[':pmax'] = (float) $priceMax;
+        $params[':pmax'] = $priceMax;
     }
 
-    if (!empty($date)) {
+    if ($date != '') {
         $sql .= " GROUP BY o.id, o.nom, o.quantite, o.tarif_journee, o.image
                   HAVING dispo > 0";
     }
@@ -93,20 +84,33 @@ function getOutilsFiltres(array $filtres = []): array
     $sql .= " ORDER BY o.nom ASC";
 
     $stmt = $pdo->prepare($sql);
-
     foreach ($params as $k => $v) {
         $stmt->bindValue($k, $v);
     }
-
     $stmt->execute();
+
     return $stmt->fetchAll();
 }
 
+function getOutilById($id) {
+    global $pdo;
+
+    $stmt = $pdo->prepare("SELECT id, nom, quantite, tarif_journee, image FROM outil WHERE id = :id");
+    $stmt->execute(array(':id' => (int)$id));
+    $outil = $stmt->fetch();
+
+    if ($outil) {
+        return $outil;
+    }
+    return null;
+}
+
+
+// Récupère les infos de l'utilisateur
 function getUtilisateurInfo(string $identifiant, string $motdepasse): ?array
 {
     global $pdo;
 
-    // Récupère les infos de l'utilisateur
     $sql = "SELECT id, identifiant, motdepasse, role
             FROM utilisateurs
             WHERE identifiant = :identifiant
@@ -167,25 +171,25 @@ function getOutilById(int $id): ?array
 /**
  * Pagination
  */
-function paginate(array $items, int $perPage, int $page): array
-{
+
+function paginate($items, $perPage, $page) {
     $total = count($items);
-    $totalPages = max(1, (int) ceil($total / $perPage));
+    $totalPages = (int) ceil($total / $perPage);
+    if ($totalPages < 1) $totalPages = 1;
 
     if ($page < 1) $page = 1;
     if ($page > $totalPages) $page = $totalPages;
 
-    $offset    = ($page - 1) * $perPage;
+    $offset = ($page - 1) * $perPage;
     $pageItems = array_slice($items, $offset, $perPage);
 
-    return [
-        'items'       => $pageItems,
-        'total'       => $total,
-        'page'        => $page,
-        'total_pages' => $totalPages,
-    ];
+    return array(
+        'items' => $pageItems,
+        'total' => $total,
+        'page' => $page,
+        'total_pages' => $totalPages
+    );
 }
-
 /**
  * Construit l’URL de pagination
  */
@@ -229,6 +233,7 @@ function getReservationsByUser(int $userId): array
 /**
  * Permet d'enregistrer une réservation
  */
+
 function ajouterReservation($idUser, $idOutil) {
     global $pdo;
 
@@ -236,18 +241,17 @@ function ajouterReservation($idUser, $idOutil) {
             VALUES (:idUser, :idOutil, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 DAY), 1)";
 
     $stmt = $pdo->prepare($sql);
-
-    $stmt->execute([
-        ':idUser'  => $idUser,
-        ':idOutil' => $idOutil
-    ]);
+    $stmt->execute(array(
+        ':idUser' => (int)$idUser,
+        ':idOutil' => (int)$idOutil
+    ));
 }
 
 /**
  * Supprime une réservation
  */
-function supprimerReservation(int $reservationId, int $userId): bool
-{
+
+function supprimerReservation($reservationId, $userId) {
     global $pdo;
 
     $sql = "DELETE FROM reservation
@@ -255,8 +259,8 @@ function supprimerReservation(int $reservationId, int $userId): bool
               AND utilisateur_id = :uid";
 
     $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':rid', $reservationId, PDO::PARAM_INT);
-    $stmt->bindValue(':uid', $userId, PDO::PARAM_INT);
-
-    return $stmt->execute();
+    return $stmt->execute(array(
+        ':rid' => (int)$reservationId,
+        ':uid' => (int)$userId
+    ));
 }
