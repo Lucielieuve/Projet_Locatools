@@ -283,3 +283,47 @@
           transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
         }
 
+/*------- BOUTONS PROFIL COMPTE ------*/
+         
+        .profil-info-modification{
+          margin-top: 2rem;
+        }
+
+        .btn-modif{
+          text-decoration: none;
+          margin-top: 2rem;
+          margin-left: 0.5rem;
+          border-radius: 0.8rem;
+          padding: 0.4rem 1rem;
+          border: 1px solid #c8ab6ecc;
+          background: #c8ab6ecc;
+          color: #000000;
+          cursor: pointer;
+          font-size: 0.9rem;
+          transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
+        }
+
+        .btn-modif:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 3px 8px rgba(15, 118, 110, 0.25);
+        }
+
+
+        /* PROFIL > RESERVATION ITEM */
+        .reservation-item {
+          margin-bottom: 2rem ;
+        }
+         .supprimer-reservation {
+          text-decoration: none;
+          margin-left: 0.5rem;
+          border-radius: 0.8rem;
+          padding: 0.2rem 0.8rem;
+          border: 1px solid #cd361bcc;
+          background: #cd361bcc;
+          color: #000000;
+          cursor: pointer;
+          font-size: 0.7rem;
+          transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
+        }
+
+
