@@ -2,16 +2,15 @@
 require_once 'config.php';
 
 /**
- * Vérifie si un utilisateur est connecté.
- * À adapter plus tard selon ta page connexion.
- */
+ * Vérifie si un utilisateur est connecté
+ **/
 function isConnecte(): bool
 {
     return isset($_SESSION['utilisateur']);
 }
 
 /**
- * Ajoute un message flash en session.
+ * Ajoute un message lors de la connexion
  */
 function adddMessageAlert(string $message): void
 {
@@ -22,7 +21,7 @@ function adddMessageAlert(string $message): void
 }
 
 /**
- * Affiche puis supprime les messages stockés en session.
+ * Affiche puis supprime les messages stockés en session
  */
 function lireEtSupprimeMessageSession(): void
 {
@@ -35,7 +34,7 @@ function lireEtSupprimeMessageSession(): void
 }
 
 /**
- * Récupère les outils filtrés depuis la BDD.
+ * Récupère les outils filtrés depuis la BDD
  */
 function getOutilsFiltres(array $filtres = []): array
 {
@@ -123,7 +122,7 @@ function getUtilisateurInfo(string $identifiant, string $motdepasse): ?array
 }
 
 /**
- * Connecte l'utilisateur : enregistre ses infos en session
+ * Connecte l'utilisateur et enregistre ses infos dans un tableau
  */
 function connecterUtilisateur(array $user): void
 {
@@ -138,21 +137,7 @@ function setDeconnecte(){
     unset($_SESSION['utilisateur']);
 }
 
-/**
- * Ajoute un outil dans un "panier" en session
- */
-function addOutilToSession(int $id, string $nom, int $tarif): void
-{
-    if (!isset($_SESSION['panier'])) {
-        $_SESSION['panier'] = [];
-    }
 
-    $_SESSION['panier'][] = [
-        'id'    => $id,
-        'nom'   => $nom,
-        'tarif' => $tarif,
-    ];
-}
 
 /**
  * Récupère un outil par son id
