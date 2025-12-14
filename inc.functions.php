@@ -226,4 +226,22 @@ function getReservationsByUser(int $userId): array
     $stmt->execute();
 
     return $stmt->fetchAll();
+
+}
+
+/**
+ * Permet d'enregistrer une réservation
+ */
+function ajouterReservation($idUser, $idOutil) {
+    global $pdo;
+
+    $sql = "INSERT INTO reservation (utilisateur_id, outil_id, date_debut, date_fin, quantite)
+            VALUES (:idUser, :idOutil, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 DAY), 1)";
+
+    $stmt = $pdo->prepare($sql);
+
+    $stmt->execute([
+        ':idUser'  => $idUser,
+        ':idOutil' => $idOutil
+    ]);
 }

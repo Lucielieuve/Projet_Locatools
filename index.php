@@ -15,9 +15,15 @@ if (!empty($_GET['outil'])) {
         $outil   = getOutilById($idOutil);
 
         if ($outil) {
-            addOutilToSession($outil['id'], $outil['nom'], (int) $outil['tarif_journee']);
+            // vérifie que l’outil existe bien dans la base 
+            $user = $_SESSION['utilisateur'];
+            // On récupère l’utilisateur qui est actuellement connecté
+            ajouterReservation($user['id'], $outil['id']);
+            
             adddMessageAlert("Outil ajouté à votre panier / réservations !");
+            // On redirige vers la page d’accueil
             header('Location: index.php');
+            // On arrête l’exécution du script
             exit;
         } else {
             adddMessageAlert("Erreur : outil introuvable.");
