@@ -31,7 +31,8 @@ CREATE TABLE `outil` (
   `id` int(11) NOT NULL,
   `nom` varchar(255) NOT NULL,
   `quantite` int(11) NOT NULL,
-  `tarif_journee` int(11) NOT NULL
+  `tarif_journee` int(11) NOT NULL,
+   
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --

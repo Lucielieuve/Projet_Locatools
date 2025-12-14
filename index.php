@@ -130,9 +130,7 @@ $totalPages  = $pagination['total_pages'];
       <?php if (!empty($pageTools)): ?>
         <?php foreach ($pageTools as $outil): ?>
           <article class="tool-card">
-            <img class="tool-img" src=""
-                 alt="<?= htmlspecialchars($outil['nom'], ENT_QUOTES); ?>">
-
+            <img class="tool-img" src="<?= htmlspecialchars($outil['image'], ENT_QUOTES); ?>" alt="Image de <?= htmlspecialchars($outil['nom']); ?>">
             <div class="tool-title">
               <?= htmlspecialchars($outil['nom'], ENT_QUOTES); ?>
             </div>
