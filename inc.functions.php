@@ -152,22 +152,6 @@ function setDeconnecte(){
 }
 
 
-
-/**
- * Récupère un outil par son id
- */
-function getOutilById(int $id): ?array
-{
-    global $pdo;
-
-    $stmt = $pdo->prepare("SELECT id, nom, quantite, tarif_journee FROM outil WHERE id = :id");
-    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-    $stmt->execute();
-    $outil = $stmt->fetch();
-
-    return $outil ?: null;
-}
-
 /**
  * Pagination
  */
